@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { FilterType } from '../types/FilterType';
 
-export const useTodoFilter = (initialTodos: Todo[]) => {
-  const [todos, setTodos] = useState<Todo[]>(initialTodos);
+// Hook now accepts the source todos array and derives filtered todos from it.
+export const useTodoFilter = (todos: Todo[]) => {
   const [filter, setFilter] = useState<FilterType>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -43,7 +43,6 @@ export const useTodoFilter = (initialTodos: Todo[]) => {
     todos: filteredTodos,
     filter,
     searchQuery,
-    setTodos,
     onFilterChange: handleFilterChange,
   };
 };

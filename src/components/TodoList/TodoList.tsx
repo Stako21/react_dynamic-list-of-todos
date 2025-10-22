@@ -1,15 +1,20 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import cn from 'classnames';
 
 type Props = {
   todos: Todo[];
-  setTodo: React.Dispatch<React.SetStateAction<Todo | undefined>>;
+  onSelectTodo: React.Dispatch<React.SetStateAction<Todo | undefined>>;
   selectedTodo?: Todo | undefined;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, setTodo, selectedTodo }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onSelectTodo,
+  selectedTodo,
+}) => {
   const handleTodoDetail = (todo: Todo) => {
-    setTodo(todo);
+    onSelectTodo(todo);
   };
 
   return (
@@ -41,9 +46,10 @@ export const TodoList: React.FC<Props> = ({ todos, setTodo, selectedTodo }) => {
               </td>
               <td className="is-vcentered is-expanded">
                 <p
-                  className={
-                    todo.completed ? 'has-text-success' : 'has-text-danger'
-                  }
+                  className={cn({
+                    'has-text-success': todo.completed,
+                    'has-text-danger': !todo.completed,
+                  })}
                 >
                   {todo.title}
                 </p>

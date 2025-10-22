@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
@@ -7,14 +8,14 @@ type Props = {
   user?: User;
   todo: Todo;
   loading: boolean;
-  setModalIsActive: (active: boolean) => void;
+  onClose: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   user,
   loading,
   todo,
-  setModalIsActive,
+  onClose,
 }) => {
   return (
     <div className="modal is-active" data-cy="modal">
@@ -37,7 +38,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setModalIsActive(false)}
+              onClick={() => onClose()}
             />
           </header>
 
@@ -47,11 +48,14 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo.completed ? (
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                <strong className="has-text-danger">Planned</strong>
-              )}
+              <strong
+                className={cn({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
+              >
+                {todo.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 

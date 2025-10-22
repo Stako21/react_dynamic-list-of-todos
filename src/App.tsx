@@ -19,21 +19,18 @@ export const App: React.FC = () => {
   const [todo, setTodo] = useState<Todo>();
   const [modalIsActive, setModalIsActive] = useState<boolean>(false);
 
-  const {
-    todos: filteredTodos,
-    onFilterChange,
-    setTodos,
-  } = useTodoFilter(initialTodos);
+  const { todos: filteredTodos, onFilterChange } = useTodoFilter(initialTodos);
+
+  // useTodoFilter now derives its state from the passed todos array
 
   useEffect(() => {
     setLoading(true);
     getTodos()
       .then(fetchedTodos => {
         setInitialTodos(fetchedTodos);
-        setTodos(fetchedTodos);
       })
       .finally(() => setLoading(false));
-  }, [setTodos]);
+  }, []);
 
   useEffect(() => {
     if (!todo) {
@@ -66,7 +63,7 @@ export const App: React.FC = () => {
               {loading && <Loader />}
               <TodoList
                 todos={filteredTodos}
-                setTodo={setTodo}
+                onSelectTodo={setTodo}
                 selectedTodo={todo}
               />
             </div>
@@ -79,12 +76,10 @@ export const App: React.FC = () => {
           user={user}
           todo={todo}
           loading={loading}
-          setModalIsActive={(active: boolean) => {
-            setModalIsActive(active);
-            if (!active) {
-              setTodo(undefined);
-              setUser(undefined);
-            }
+          onClose={() => {
+            setModalIsActive(false);
+            setTodo(undefined);
+            setUser(undefined);
           }}
         />
       )}
