@@ -21,6 +21,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({ onFilterChange }) => {
 
   const handleSearchReset = () => {
     setSearchQuery('');
+    setStatusFilter('all');
   };
 
   useEffect(() => {

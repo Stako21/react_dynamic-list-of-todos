@@ -14,7 +14,8 @@ import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [todosLoading, setTodosLoading] = useState<boolean>(false);
+  const [userLoading, setUserLoading] = useState<boolean>(false);
   const [user, setUser] = useState<User>();
   const [todo, setTodo] = useState<Todo>();
   const [modalIsActive, setModalIsActive] = useState<boolean>(false);
@@ -24,12 +25,12 @@ export const App: React.FC = () => {
   // useTodoFilter now derives its state from the passed todos array
 
   useEffect(() => {
-    setLoading(true);
+    setTodosLoading(true);
     getTodos()
       .then(fetchedTodos => {
         setInitialTodos(fetchedTodos);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setTodosLoading(false));
   }, []);
 
   useEffect(() => {
@@ -38,14 +39,14 @@ export const App: React.FC = () => {
     }
 
     setModalIsActive(true);
-    setLoading(true);
     setUser(undefined);
+    setUserLoading(true);
 
     getUser(todo.userId)
       .then(choicedUser => {
         setUser(choicedUser);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setUserLoading(false));
   }, [todo]);
 
   return (
@@ -60,7 +61,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
+              {todosLoading && <Loader />}
               <TodoList
                 todos={filteredTodos}
                 onSelectTodo={setTodo}
@@ -75,7 +76,7 @@ export const App: React.FC = () => {
         <TodoModal
           user={user}
           todo={todo}
-          loading={loading}
+          loading={userLoading}
           onClose={() => {
             setModalIsActive(false);
             setTodo(undefined);
